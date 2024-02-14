@@ -30,11 +30,10 @@ if __name__ == "__main__":
     parser.add_argument('--transformers_path', type=str, default=None, help='Path of the input data.')
     args = parser.parse_args()
     
-    transformers_path = "/data/sunwangtao/.conda/envs/kid/lib/python3.8/site-packages/transformers"
     patch_filename = "utils.py"
 
     work_dir = os.path.abspath(os.getcwd())
 
     patch_path = os.path.join(work_dir, patch_filename)
 
-    apply_patch(transformers_path, patch_path)
+    apply_patch(args.transformers_path, patch_path)

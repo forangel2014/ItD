@@ -27,6 +27,4 @@ if __name__ == "__main__":
     parser.add_argument('--transformers_path', type=str, default=None, help='Path of the input data.')
     args = parser.parse_args()
     
-    transformers_path = "/data/sunwangtao/.conda/envs/kid/lib/python3.8/site-packages/transformers"
-
-    remove_patch(transformers_path)
+    remove_patch(args.transformers_path)
