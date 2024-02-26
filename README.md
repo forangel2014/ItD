@@ -1,18 +1,17 @@
-## 关于chatgpt微调实验
-1. chatgpt归纳（采样先验f）
+## Deductive Data Generation
 ```
-python run_insin.py --exp_dir ./exp/insin/chatgpt --base_model chatgpt --mode io-sample --run_induction
-```
-
-2. chatgpt演绎（基于f，生成x,y）
-```
-python deduction_insin.py --exp_dir ./exp/insin/induced1_chatgpt --base_model chatgpt --mode io --load_from_induced ./exp/insin/chatgpt/induction_out/io-sample
+python run_insin.py --exp_dir ./exp/insin/sample --base_model <model_path or chatgpt> --mode io-sample --run_induction
+python deduction_insin.py --exp_dir ./exp/insin/<your exp name> --base_model <model_path or chatgpt> --mode <io or gd> --load_from_induced ./exp/insin/sample/induction-out/io-sample
 ```
 
-3. chatgpt微调（基于演绎得到的f,x,y）
+## fine-tuning
 
-
-4. 测试微调后的模型
 ```
-python run_insin.py --exp_dir ./exp/insin/induced1_chatgpt --base_model chatgpt --mode io --run_induction --run_deduction
+cd finetune
+bash finetune_lora.sh
+```
+
+## Induction
+```
+python run_insin.py --exp_dir ./exp/insin/<your exp name> --base_model <model_path or chatgpt> --mode <io or gd> --run_induction --run_deduction
 ```

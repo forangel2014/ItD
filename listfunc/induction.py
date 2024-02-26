@@ -24,7 +24,7 @@ def induce(args):
         
         transformations = []
         
-        if task == "results" or os.path.exists(f"{args.exp_dir}/{args.out_dir}/{args.mode}/{task}/transformations.json"):
+        if task == "results": #or os.path.exists(f"{args.exp_dir}/{args.out_dir}/{args.mode}/{task}/transformations.json"):
             print(f"skip task {task}")
             continue
         
@@ -68,16 +68,16 @@ def induce(args):
                         success = False
             else:             
                 if args.mode == 'gd':
-                    # prompt = args.prompter.GD_prompt(samples)
-                    # response = args.inductor.induce(prompt, num_beams=5)
-                    samples.append(samples[0])
-                    merged_samples = []
-                    i = 0
-                    while i < len(samples):
-                        merged_samples.append("\n".join([samples[i], samples[i+1]]))
-                        i += 2
-                    prompt = args.prompter.GD_prompt(merged_samples)
+                    prompt = args.prompter.GD_prompt(samples)
                     response = args.inductor.induce(prompt, num_beams=5)
+                    # samples.append(samples[0])
+                    # merged_samples = []
+                    # i = 0
+                    # while i < len(samples):
+                    #     merged_samples.append("\n".join([samples[i], samples[i+1]]))
+                    #     i += 2
+                    # prompt = args.prompter.GD_prompt(merged_samples)
+                    # response = args.inductor.induce(prompt, num_beams=5)
                 elif args.mode == 'gd-sample':
                     prompt = args.prompter.GD_prompt(samples)
                     response = args.inductor.gd_sample(prompt, num_beams=5)

@@ -2,7 +2,7 @@
 # LICENSE file in the root directory of this source tree.
 import os
 
-os.environ["CUDA_VISIBLE_DEVICES"] = "4,5,6,7" 
+os.environ["CUDA_VISIBLE_DEVICES"] = "0,1,2,3" 
 
 from collections import defaultdict
 import copy

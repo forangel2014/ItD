@@ -43,7 +43,7 @@ def invert_performance(performance):
 
 def visualize(args):
     
-    order = ["mixtral-io", "mixtral-io_sample", "mixtral-sc", "mixtral-hs", "mixtral-hsr", "mixtral-hs+d", "mixtral_induced-gd", "mixtral_induced+d-gd", "mixtral_io-io-2", "mixtral_io-io", "mixtral_io-io-8", "mixtral_io-io-20", "mixtral_induced-gd-2", "chatgpt-io", "induced_chatgpt-io", "gpt4-io", "reference-io"]
+    order = ["mixtral-io", "mixtral-io_sample", "mixtral-sc", "mixtral-hs", "mixtral-hsr", "mixtral-hs+d", "mixtral_induced-gd", "mixtral-2-gd", "mixtral_induced+d-gd", "mixtral_io-io-2", "mixtral_io-io", "mixtral_io-io-8", "mixtral_io-io-20", "mixtral_induced-gd-2", "chatgpt-io", "induced_chatgpt-io", "gpt4-io", "reference-io"]
 
     performance = {}
     settings = list_subdirectories(args.task_dir)
@@ -91,7 +91,7 @@ def visualize(args):
     # plt.savefig(f"./exp/listfunc/execution.png")
     # plt.show()
     
-    markdown_table = generate_markdown_table(inverted_performance, order, tasks="all")
+    markdown_table = generate_markdown_table(inverted_performance, order, tasks="average")
 
     # Save markdown table to file
     with open(f"./exp/listfunc/execution.md", "w") as file:
