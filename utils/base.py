@@ -244,3 +244,15 @@ class StopAtSpecificTokenCriteria(StoppingCriteria):
     @add_start_docstrings(STOPPING_CRITERIA_INPUTS_DOCSTRING)
     def __call__(self, input_ids: torch.LongTensor, scores: torch.FloatTensor, **kwargs) -> bool:
         return input_ids[0][-1].detach().cpu().numpy() in self.token_id_list
+    
+def find_combinations(lst):
+    n = len(lst)
+    combinations = []
+    
+    for i in range(n-2):
+        for j in range(i+1, n-1):
+            for k in range(j+1, n):
+                combination = "\n".join([lst[i], lst[j], lst[k]])
+                combinations.append(combination)
+    
+    return combinations

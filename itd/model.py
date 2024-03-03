@@ -22,8 +22,8 @@ def load_finetuned_model_and_tokenizer(model_name_or_path, finetune_model_path):
     tokenizer.pad_token = tokenizer.bos_token
     model = AutoModelForCausalLM.from_pretrained(model_name_or_path, device_map="auto", torch_dtype=torch.float16, load_in_8bit=True,
                                                 #max_memory={0: "5GB", 1: "5GB", 2: "5GB", 3: "5GB", 4: "5GB", 5: "0GB", 6: "0GB", 7: "0GB", 8: "0GB", 9: "0GB"})
-                                                #max_memory={0: "0GB", 1: "0GB", 2: "0GB", 3: "0GB", 4: "0GB", 5: "5GB", 6: "5GB", 7: "5GB", 8: "5GB", 9: "0GB"})
-                                                max_memory={0: "10GB", 1: "10GB", 2: "10GB", 3: "10GB", 4: "10GB", 5: "10GB", 6: "10GB", 7: "10GB", 8: "0GB", 9: "10GB"})
+                                                #max_memory={0: "0GB", 1: "0GB", 2: "0GB", 3: "0GB", 4: "0GB", 5: "0GB", 6: "20GB", 7: "20GB", 8: "20GB", 9: "0GB"})
+                                                max_memory={0: "10GB", 1: "10GB", 2: "10GB", 3: "10GB", 4: "10GB", 5: "10GB", 6: "10GB", 7: "10GB", 8: "10GB", 9: "10GB"})
 
     model = model.eval()
     

@@ -12,7 +12,7 @@ from itd.model import load_base_model_and_tokenizer, load_chatglm, load_finetune
 from itd.induction import LLMInductor
 from itd.prompt import Prompter
 from itd.lm import LLM
-from utils.base import list_subdirectories, mkdir, sort_list_by_frequency
+from utils.base import list_subdirectories, mkdir, sort_list_by_frequency, find_combinations
 from utils.listfunc import parse_function, post_process, validate_function_syntax, load_induced_transformations, parse_hypo
 from listfunc.run_eval import select_hypothesis, select_hypothesis_lm
 
@@ -68,16 +68,15 @@ def induce(args):
                         success = False
             else:             
                 if args.mode == 'gd':
-                    prompt = args.prompter.GD_prompt(samples)
-                    response = args.inductor.induce(prompt, num_beams=5)
                     # samples.append(samples[0])
                     # merged_samples = []
                     # i = 0
                     # while i < len(samples):
-                    #     merged_samples.append("\n".join([samples[i], samples[i+1]]))
-                    #     i += 2
-                    # prompt = args.prompter.GD_prompt(merged_samples)
-                    # response = args.inductor.induce(prompt, num_beams=5)
+                    #     merged_samples.append("\n".join([samples[i], samples[i+1], samples[i+2]]))
+                    #     i += 3
+                    merged_samples = find_combinations(samples)
+                    prompt = args.prompter.GD_prompt(merged_samples)
+                    response = args.inductor.induce(prompt, num_beams=5)
                 elif args.mode == 'gd-sample':
                     prompt = args.prompter.GD_prompt(samples)
                     response = args.inductor.gd_sample(prompt, num_beams=5)
@@ -100,22 +99,24 @@ def induce(args):
                     prompt = args.prompter.IO_prompt(samples)
                     response = args.inductor.beamsearch(prompt, num_beams=5)
                 elif args.mode == 'gd-2':
-                    merged_samples = []
-                    i = 0
-                    while i < len(samples):
-                        merged_samples.append("\n".join([samples[i], samples[i+1]]))
-                        i += 2
+                    # merged_samples = []
+                    # i = 0
+                    # while i < len(samples):
+                    #     merged_samples.append("\n".join([samples[i], samples[i+1]]))
+                    #     i += 2
+                    merged_samples = find_combinations(samples + [samples[0]])
                     prompt = args.prompter.GD_prompt(merged_samples)
                     response = args.inductor.beamsearch(prompt, num_beams=5)
                 elif args.mode == 'gd-8':
                     samples_extra = random.choice(train_batch)
                     samples_extra = [f"input: {train_data['input']}\noutput: {train_data['target']}" for train_data in samples_extra]
                     samples += samples_extra[:3]
-                    merged_samples = []
-                    i = 0
-                    while i < len(samples):
-                        merged_samples.append("\n".join([samples[i], samples[i+1]]))
-                        i += 2
+                    # merged_samples = []
+                    # i = 0
+                    # while i < len(samples):
+                    #     merged_samples.append("\n".join([samples[i], samples[i+1]]))
+                    #     i += 2
+                    merged_samples = find_combinations(samples + [samples[0]])
                     prompt = args.prompter.GD_prompt(merged_samples)
                     response = args.inductor.beamsearch(prompt, num_beams=5)
                 elif args.mode == 'gd-20':
@@ -123,16 +124,22 @@ def induce(args):
                         samples_extra = random.choice(train_batch)
                         samples_extra = [f"input: {train_data['input']}\noutput: {train_data['target']}" for train_data in samples_extra]
                         samples += samples_extra
-                    merged_samples = []
-                    i = 0
-                    while i < len(samples):
-                        merged_samples.append("\n".join([samples[i], samples[i+1]]))
-                        i += 2
+                    # merged_samples = []
+                    # i = 0
+                    # while i < len(samples):
+                    #     merged_samples.append("\n".join([samples[i], samples[i+1]]))
+                    #     i += 2
+                    merged_samples = find_combinations(samples + [samples[0]])
                     prompt = args.prompter.GD_prompt(merged_samples)
                     response = args.inductor.beamsearch(prompt, num_beams=5)
                 elif args.mode == 'io-sample':
                     prompt = args.prompter.IO_prompt(samples)
-                    response = args.inductor.self_consistency(prompt, num_beams=1)
+                    for i in range(5):
+                        text, score = args.inductor.self_consistency(prompt, num_beams=1)
+                        if not text.startswith("The transformation"):
+                            text = "The transformation " + text
+                        transformations.append(text)
+                    continue
                 elif args.mode == 'hs' or args.mode == 'hs+d':
                     prompt = args.prompter.IO_prompt(samples)
                     texts = []
