@@ -99,12 +99,15 @@ def induce(args):
                     prompt = args.prompter.IO_prompt(samples)
                     response = args.inductor.beamsearch(prompt, num_beams=5)
                 elif args.mode == 'gd-2':
+                    samples_extra = random.choice(train_batch)
+                    samples_extra = [f"input: {train_data['input']}\noutput: {train_data['target']}" for train_data in samples_extra]
+                    samples += samples_extra[:1]
                     # merged_samples = []
                     # i = 0
                     # while i < len(samples):
                     #     merged_samples.append("\n".join([samples[i], samples[i+1]]))
                     #     i += 2
-                    merged_samples = find_combinations(samples + [samples[0]])
+                    merged_samples = find_combinations(samples)
                     prompt = args.prompter.GD_prompt(merged_samples)
                     response = args.inductor.beamsearch(prompt, num_beams=5)
                 elif args.mode == 'gd-8':

@@ -255,4 +255,4 @@ def find_combinations(lst):
                 combination = "\n".join([lst[i], lst[j], lst[k]])
                 combinations.append(combination)
     
-    return combinations
+    return combinations[:10]
