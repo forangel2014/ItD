@@ -4,7 +4,7 @@ import openai
 import csv
 import json
 import random
-from kid.lm import LLM
+from itd.lm import LLM
 from tqdm import tqdm
 from utils.base import first_part, list_files, list_subdirectories, replace_first_quote_content
 
